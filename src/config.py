@@ -20,7 +20,12 @@ OAUTH_CLIENT_SECRET = os.getenv('OAUTH_CLIENT_SECRET')
 # Bounty site configuration
 BOUNTY_SITE_URL = os.getenv('BOUNTY_SITE_URL')
 
-# Database configuration
+# Supabase configuration
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+SUPABASE_SERVICE_ROLE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+
+# Database configuration (fallback to SQLite for local dev)
 DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./data.db')
 
 # Optional third-party services
@@ -51,3 +56,9 @@ def validate_config():
     
     if not BOUNTY_SITE_URL:
         raise ValueError("BOUNTY_SITE_URL is required")
+    
+    # Validate Supabase configuration if provided
+    if SUPABASE_URL and not SUPABASE_KEY:
+        raise ValueError("SUPABASE_URL provided but SUPABASE_KEY is missing")
+    if SUPABASE_KEY and not SUPABASE_URL:
+        raise ValueError("SUPABASE_KEY provided but SUPABASE_URL is missing")

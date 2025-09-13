@@ -194,3 +194,4 @@ dump.rdb
 # Local development
 local/
 dev/
+instructions.md

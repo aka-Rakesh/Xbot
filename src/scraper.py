@@ -145,7 +145,7 @@ class BountyScraper:
                 # Extract bounty data by looking for elements containing 'thread', 'twitter', etc.
                 bounties = page.evaluate("""
                     () => {
-                        const keywords = ['thread', 'twitter', 'bounty', 'task', 'job', 'opportunity', 'social', 'post'];
+                        const keywords = ['thread', 'twitter', 'bounty', 'task', 'job', 'opportunity', 'social', 'post', 'content', 'writing', 'article', 'blog', 'tweet', 'social media', 'marketing', 'promotion'];
                         const allElements = document.querySelectorAll('div, article, section, li');
                         const bountyElements = [];
                         
@@ -157,8 +157,11 @@ class BountyScraper:
                             const isNavigation = text.includes('login') || text.includes('sign up') || 
                                                text.includes('become a sponsor') || text.includes('nprogress') ||
                                                text.includes('pointer-events') || text.includes('background:') ||
+                                               text.includes('filter') || text.includes('sort') ||
+                                               text.includes('category') || text.includes('status') ||
                                                el.tagName === 'NAV' || el.tagName === 'HEADER' ||
-                                               el.classList.contains('nav') || el.classList.contains('header');
+                                               el.classList.contains('nav') || el.classList.contains('header') ||
+                                               el.classList.contains('filter') || el.classList.contains('sort');
                             
                             if (hasKeyword && el.textContent.trim().length > 20 && !isNavigation) {
                                 const link = el.querySelector('a') || el.closest('a');

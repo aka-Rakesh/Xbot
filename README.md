@@ -36,7 +36,19 @@ An automated bot that scrapes bounty sites for crypto posting bounties and posts
    # Edit .env with your Twitter API credentials and bounty site URL
    ```
 
-3. **Initialize database**:
+3. **Setup Database**:
+   
+   **Option A: Supabase (Recommended)**
+   1. Create a Supabase project at https://supabase.com
+   2. Run the SQL schema: Copy `supabase_schema.sql` content to Supabase SQL Editor
+   3. Get your project URL and API keys from Settings > API
+   4. Add to `.env`:
+      ```bash
+      SUPABASE_URL=https://your-project.supabase.co
+      SUPABASE_KEY=your_anon_key
+      ```
+   
+   **Option B: SQLite (Local Development)**
    ```bash
    python -c "from src.storage import init_db; init_db()"
    ```
@@ -82,12 +94,25 @@ MAX_POSTS_PER_DAY=10
 USER_DISPLAY_NAME=MyBountyBot
 ```
 
+### Database Configuration
+
+**Option 1: Supabase (Recommended for Production)**
+```bash
+# Supabase Database
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+```
+
+**Option 2: SQLite (Local Development)**
+```bash
+# Fallback database
+DATABASE_URL=sqlite:///./data.db
+```
+
 ### Optional Variables
 
 ```bash
-# Database (defaults to SQLite)
-DATABASE_URL=sqlite:///./data.db
-
 # OpenAI for LLM thread generation
 OPENAI_API_KEY=your_openai_key
 
