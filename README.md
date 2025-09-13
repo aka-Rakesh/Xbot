@@ -1,220 +1,281 @@
-# Twitter Bounty Bot
+# Crypto News Bot with Bounty Integration
 
-An automated bot that scrapes bounty sites for crypto posting bounties and posts engaging threads to Twitter/X to claim bounties and grow an organic following.
+An intelligent automated bot that generates organic crypto/Web3 content using local LLM (DeepSeek via Ollama), strategically posts bounties for revenue streams, and builds a sustainable following through quality content.
 
-## Features
+## 🚀 Features
 
-- 🔍 **Automated Scraping**: Monitors bounty sites for new opportunities
-- 🧵 **Thread Generation**: Creates engaging Twitter threads from bounty data
-- 🤖 **Smart Posting**: Posts threads via Twitter API with rate limiting
-- 🔄 **Deduplication**: Prevents duplicate posts and tracks seen bounties
-- 📊 **Monitoring**: Comprehensive logging and error handling
-- 🐳 **Docker Ready**: Easy deployment with Docker and docker-compose
+- **📰 News Aggregation**: Scrapes crypto news from multiple sources
+- **🤖 AI Content Generation**: Uses DeepSeek via Ollama for intelligent content creation
+- **💰 Bounty Integration**: Strategic posting of relevant bounties for revenue
+- **📊 Context Awareness**: Maintains posting history and engagement data
+- **⏰ Smart Scheduling**: Pre-generates and schedules content throughout the day
+- **📈 Analytics**: Tracks engagement, performance, and revenue metrics
+- **🔒 Local LLM**: Privacy-focused content generation with DeepSeek
 
-## Quick Start
+## 🎯 Strategy
+
+- **80% Organic Content**: Quality crypto news and analysis
+- **20% Bounty Posts**: Strategic revenue-generating content
+- **Context-Aware**: Uses previous posts and trends for better content
+- **Scheduled Distribution**: Spreads content throughout the day for maximum engagement
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   News Sources  │    │   Bounty Sites   │    │   DeepSeek LLM  │
+│  (CoinDesk,     │    │  (Superteam,     │    │   (via Ollama)  │
+│   CoinTelegraph)│    │   Gitcoin, etc)  │    │                 │
+└─────────┬───────┘    └─────────┬────────┘    └─────────┬───────┘
+          │                      │                       │
+          ▼                      ▼                       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Content Generator                            │
+│  • Context-aware prompt building                               │
+│  • Thread generation with engagement data                      │
+│  • Content quality filtering                                   │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Content Scheduler                           │
+│  • Daily content calendar                                       │
+│  • Optimal timing based on engagement                          │
+│  • Queue management and approval workflow                      │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Twitter Poster                              │
+│  • Rate-limited posting                                        │
+│  • Thread management                                           │
+│  • Engagement tracking                                         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.11+
-- Twitter Developer Account with API access
-- Docker (optional, for containerized deployment)
+1. **Install Ollama**:
+   ```bash
+   curl -fsSL https://ollama.ai/install.sh | sh
+   ollama pull deepseek-coder
+   ```
 
-### Local Development
-
-1. **Clone and setup**:
+2. **Clone and Setup**:
    ```bash
    git clone <your-repo-url>
-   cd twitter-bounty-bot
+   cd crypto-news-bot
    python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   source .venv/bin/activate  # Windows: .venv\Scripts\activate
    pip install -r requirements.txt
    ```
 
-2. **Configure environment**:
+3. **Configure Environment**:
    ```bash
    cp .env.example .env
-   # Edit .env with your Twitter API credentials and bounty site URL
+   # Edit .env with your credentials
    ```
 
-3. **Setup Database**:
-   
-   **Option A: Supabase (Recommended)**
-   1. Create a Supabase project at https://supabase.com
-   2. Run the SQL schema: Copy `supabase_schema.sql` content to Supabase SQL Editor
-   3. Get your project URL and API keys from Settings > API
-   4. Add to `.env`:
-      ```bash
-      SUPABASE_URL=https://your-project.supabase.co
-      SUPABASE_KEY=your_anon_key
-      ```
-   
-   **Option B: SQLite (Local Development)**
+4. **Setup Database**:
    ```bash
+   # Option A: Supabase (Recommended)
+   # 1. Create Supabase project
+   # 2. Run SQL schema from supabase_schema.sql
+   # 3. Add SUPABASE_URL and SUPABASE_KEY to .env
+   
+   # Option B: SQLite (Local Development)
    python -c "from src.storage import init_db; init_db()"
    ```
 
-4. **Run the bot**:
+5. **Run the Bot**:
    ```bash
-   # Run once for testing
+   # Test once
    python -m src.main --once
    
    # Run scheduler
    python -m src.main
    ```
 
-### Docker Deployment
-
-1. **Build and run**:
-   ```bash
-   docker-compose up --build
-   ```
-
-2. **View logs**:
-   ```bash
-   docker-compose logs -f bounty-bot
-   ```
-
-## Configuration
+## ⚙️ Configuration
 
 ### Required Environment Variables
 
 ```bash
-# Twitter API Credentials
+# Twitter API (Basic tier recommended)
 TW_API_KEY=your_api_key
 TW_API_SECRET=your_api_secret
 TW_ACCESS_TOKEN=your_access_token
 TW_ACCESS_SECRET=your_access_secret
 
-# Bounty Site
-BOUNTY_SITE_URL=https://your-bounty-site.com
+# News Sources
+COINDESK_API_KEY=your_coindesk_key
+COINTELEGRAPH_API_KEY=your_cointelegraph_key
 
-# Bot Behavior
-POST_INTERVAL_MINUTES=10
-MAX_POSTS_PER_DAY=10
-USER_DISPLAY_NAME=MyBountyBot
+# LLM Configuration
+OLLAMA_BASE_URL=http://localhost:11434
+DEEPSEEK_MODEL=deepseek-coder
+
+# Content Strategy
+NEWS_POSTS_PER_DAY=8
+BOUNTY_POSTS_PER_DAY=2
+CONTENT_MIX_RATIO=0.8
 ```
 
-### Database Configuration
+### Content Strategy Settings
 
-**Option 1: Supabase (Recommended for Production)**
+- **`NEWS_POSTS_PER_DAY`**: Number of news-based posts per day
+- **`BOUNTY_POSTS_PER_DAY`**: Number of bounty posts per day
+- **`CONTENT_MIX_RATIO`**: Ratio of news to bounty content (0.8 = 80% news)
+- **`POST_INTERVAL_MINUTES`**: Time between posts (default: 120 minutes)
+
+## 📊 Database Schema
+
+The bot uses a comprehensive database schema to track:
+
+- **News Articles**: Scraped crypto news with sentiment analysis
+- **Bounties**: Available bounty opportunities with reward tracking
+- **Content Queue**: Scheduled posts with approval workflow
+- **Analytics**: Engagement metrics and revenue tracking
+- **Posting History**: Complete record of all posted content
+
+## 🤖 LLM Integration
+
+### DeepSeek via Ollama
+
+The bot uses DeepSeek model running locally via Ollama for:
+
+- **Content Generation**: Creating engaging crypto threads
+- **Context Awareness**: Using posting history and trends
+- **Quality Control**: Ensuring content meets standards
+- **Personalization**: Adapting tone and style over time
+
+### Prompt Engineering
+
+The bot uses sophisticated prompts that include:
+
+- **Previous successful posts** for style consistency
+- **Current market trends** for relevance
+- **User engagement patterns** for optimization
+- **News article context** for accuracy
+
+## 📈 Revenue Integration
+
+### Bounty Revenue Tracking
+
+- **Performance Metrics**: Track bounty post engagement
+- **Conversion Rates**: Monitor bounty completion rates
+- **Revenue Calculation**: Calculate earnings per post
+- **Optimization**: Improve bounty selection criteria
+
+### Content Performance
+
+- **A/B Testing**: Test different content styles
+- **Engagement Analysis**: Track likes, retweets, replies
+- **Timing Optimization**: Find best posting times
+- **Audience Insights**: Build follower understanding
+
+## 🛡️ Safety & Compliance
+
+### Content Guidelines
+
+- ✅ All AI-generated content reviewed for accuracy
+- ✅ No financial advice without disclaimers
+- ✅ Respect platform automation rules
+- ✅ Maintain authentic voice and engagement
+
+### Bounty Integration
+
+- ✅ Only promote relevant, legitimate bounties
+- ✅ Disclose promotional content appropriately
+- ✅ Maintain quality standards
+- ✅ Avoid spammy or repetitive content
+
+## 🚀 Deployment
+
+### Local Development
+
 ```bash
-# Supabase Database
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_KEY=your_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+# Start Ollama
+ollama serve
+
+# Run bot in development mode
+python -m src.main --dev
 ```
 
-**Option 2: SQLite (Local Development)**
-```bash
-# Fallback database
-DATABASE_URL=sqlite:///./data.db
-```
-
-### Optional Variables
+### Production with Docker
 
 ```bash
-# OpenAI for LLM thread generation
-OPENAI_API_KEY=your_openai_key
+# Build and run
+docker-compose up --build
 
-# Monitoring
-SENTRY_DSN=your_sentry_dsn
+# View logs
+docker-compose logs -f crypto-news-bot
 ```
 
-## Project Structure
+### VPS Deployment
 
-```
-twitter-bounty-bot/
-├── src/
-│   ├── main.py          # Scheduler and main entry point
-│   ├── scraper.py       # Bounty site scraping
-│   ├── poster.py        # Twitter posting functionality
-│   ├── generator.py     # Thread generation (templates + LLM)
-│   ├── storage.py       # Database operations
-│   ├── config.py        # Configuration management
-│   └── utils.py         # Utility functions
-├── tests/               # Test files
-├── migrations/          # Database migrations
-├── dockerfile          # Docker configuration
-├── docker-compose.yml  # Docker Compose setup
-├── requirements.txt    # Python dependencies
-└── .env.example       # Environment variables template
-```
+1. **Setup Ollama** on GPU-enabled server
+2. **Configure Supabase** for production database
+3. **Deploy with Docker** or systemd service
+4. **Setup monitoring** and alerts
 
-## Customization
+## 📊 Monitoring
 
-### Adding New Bounty Sites
+### Key Metrics
 
-1. **Update scraper.py**:
-   - Modify CSS selectors in `fetch_bounties_requests()`
-   - Add site-specific parsing logic
-   - Test with `python -c "from src.scraper import fetch_bounties; print(fetch_bounties())"`
+- **Content Performance**: Engagement rates, reach, impressions
+- **Revenue Tracking**: Bounty earnings, conversion rates
+- **Bot Health**: Uptime, error rates, API limits
+- **Content Quality**: Approval rates, user feedback
 
-2. **Update thread templates**:
-   - Modify templates in `generator.py`
-   - Customize thread structure and hashtags
-   - Add site-specific formatting
+### Alerts
 
-### Thread Generation
+- **High Error Rates**: Bot malfunction detection
+- **API Limits**: Rate limit warnings
+- **Content Issues**: Quality control alerts
+- **Revenue Drops**: Performance monitoring
 
-The bot supports two thread generation modes:
-
-1. **Template-based** (default): Uses predefined templates
-2. **LLM-powered**: Uses OpenAI GPT for dynamic content
-
-Enable LLM mode by setting `OPENAI_API_KEY` in your environment.
-
-## Safety & Compliance
-
-⚠️ **Important**: Before going live, ensure compliance with:
-
-- Twitter's automation and spam policies
-- Bounty site terms of service
-- Applicable laws and regulations
-- Platform-specific labeling requirements
-
-## Monitoring
-
-### Logs
-
-- Application logs: `bounty_bot.log`
-- Docker logs: `docker-compose logs bounty-bot`
-
-### Health Checks
-
-- Database connectivity
-- Twitter API status
-- Rate limit monitoring
-
-## Testing
+## 🧪 Testing
 
 ```bash
 # Run all tests
 pytest
 
-# Run specific test file
-pytest tests/test_scraper.py
+# Test specific components
+pytest tests/test_llm_service.py
+pytest tests/test_content_generator.py
 
-# Run with coverage
+# Test with coverage
 pytest --cov=src
 ```
 
-## Troubleshooting
+## 📚 Project Structure
 
-### Common Issues
-
-1. **Twitter API 401/403**: Check credentials and permissions
-2. **Rate limit exceeded**: Reduce `POST_INTERVAL_MINUTES`
-3. **Scraping fails**: Update CSS selectors for target site
-4. **Database errors**: Check `DATABASE_URL` and permissions
-
-### Debug Mode
-
-```bash
-# Run with debug logging
-PYTHONPATH=. python -m src.main --once
+```
+crypto-news-bot/
+├── src/
+│   ├── main.py                 # Main scheduler
+│   ├── news_scraper.py         # News aggregation
+│   ├── bounty_scraper.py       # Bounty monitoring
+│   ├── llm_service.py          # DeepSeek integration
+│   ├── content_generator.py    # AI content creation
+│   ├── scheduler.py            # Content calendar
+│   ├── poster.py               # Twitter posting
+│   ├── storage.py              # Database operations
+│   ├── analytics.py            # Performance tracking
+│   ├── config.py               # Configuration
+│   └── utils.py                # Utilities
+├── models/                     # LLM prompts and templates
+├── data/                       # Local data storage
+├── tests/                      # Test suite
+├── dockerfile                  # Docker configuration
+├── docker-compose.yml          # Docker Compose setup
+└── supabase_schema.sql         # Database schema
 ```
 
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -222,10 +283,20 @@ PYTHONPATH=. python -m src.main --once
 4. Add tests
 5. Submit a pull request
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Disclaimer
+## ⚠️ Disclaimer
 
 This bot is for educational and research purposes. Users are responsible for ensuring compliance with all applicable terms of service, laws, and regulations. The authors are not responsible for any misuse or violations.
+
+## 🆘 Support
+
+- **Issues**: Report bugs and feature requests on GitHub
+- **Discussions**: Join community discussions
+- **Documentation**: Check the instructions.md file for detailed setup
+
+---
+
+**Built with ❤️ for the crypto community**
