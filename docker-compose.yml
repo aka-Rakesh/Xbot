@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  bounty-bot:
+    build: .
+    container_name: twitter-bounty-bot
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - DATABASE_URL=sqlite:///./data/bounty_bot.db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "from src.config import validate_config; validate_config()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add Redis for distributed locking in production
+  redis:
+    image: redis:7-alpine
+    container_name: bounty-bot-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
